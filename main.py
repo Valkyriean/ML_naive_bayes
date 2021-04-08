@@ -1,5 +1,5 @@
 import pandas as pd
-
+import numpy as np
 
 class Pose:
     def __init__(self, pose, x):
@@ -22,22 +22,31 @@ def preprocess(filename):
     f.close()
     return x,y
 
-def train(x, y):
-    model = []
-    data = [len(x[0])][0]
-    cur_pose = y[0]
-    for i in range(len(x)):
-        if y[i] != cur_pose:
+# def train(x, y):
+#     model = []
+#     data = []
+#     cur_pose = y[0]
+#     for i in range(len(x)):
+#         if y[i] != cur_pose:
             
-            model.append(Pose(cur_pose, data))
-            data = [len(x[0])][0]
-        for j in range(len(x[i])):
-            data[j].append(x[i][j])
-    return model
+#             model.append(Pose(cur_pose, data))
+#             data = []
+#         for j in range(len(x[i])):
+#             data[j].append(x[i][j])
+#     return model
 
 
 filename = "train.csv"
-# print(preprocess(filename))
+# x, y = preprocess(filename)
+# train(x, y)
 
-a = pd.read_csv(filename)
-print(a)
+a = pd.read_csv(filename, header = None)
+b = sorted(list(set(a[a.columns[0]])))
+c = a.loc[a[0] == b[0]]
+c = c[c.columns[1:]]
+# c = c.transpose()
+c = c.replace(9999, np.NaN)
+d = np.nanmean(c, axis=0)
+e = np.nanstd(c,axis= 0)
+print(e)
+
