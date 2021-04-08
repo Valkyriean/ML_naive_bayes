@@ -6,7 +6,7 @@ class Pose:
         self.pose = pose
         self.mean = mean
         self.std = std
-        self.prior
+        self.prior = prior
 
 
 def preprocess(filename):
@@ -19,7 +19,11 @@ def train(data):
     for label in labels:
         pose_data = data.loc[data[0] == label]
         pose_data = pose_data[pose_data.columns[1:]]
-        pose = Pose()
+        pose = Pose(label, 
+                    np.nanmean(pose_data, axis=0),
+                    np.nanstd(pose_data, axis=0),
+                    len(pose_data)/len(data)
+                    )
 
 
 filename = "train.csv"
@@ -34,5 +38,5 @@ c = c[c.columns[1:]]
 # c = c.transpose()
 d = np.nanmean(c, axis=0)
 e = np.nanstd(c,axis= 0)
-print(preprocess(filename))
+print(len(c))
 
